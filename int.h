@@ -1,5 +1,6 @@
 #ifndef INT_VECTOR3
 #define INT_VECTOR3
+#define ENOUGH 12
 
 void* sumInt(void *a, void *b) {
     int* ia = (int*)a;
@@ -24,13 +25,22 @@ void* minusInt(void *a) {
     return (void *)r;
 }
 
+char* intToString(void *number) {
+    char *str = malloc(ENOUGH * sizeof(char));
+    int *intNumber = (int *)number, len;
+    sprintf(str, "%d", *intNumber);
+    len = strlen(str);
+    str = realloc(str, (len + 1) * sizeof(char));
+    return str;
+}
+
 struct Ring* CreateIntRing() {
     int *intZero = malloc(sizeof(int *));
     int *intOne = malloc(sizeof(int *));
     *intZero = 0;
     *intOne = 1;
     size_t size = sizeof(int);
-    return CreateRing(size, sumInt, multInt, minusInt, (void *)intZero, (void *)intOne);
+    return CreateRing(size, sumInt, multInt, minusInt, (void *)intZero, (void *)intOne, intToString);
 }
 
 
