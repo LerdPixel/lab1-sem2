@@ -14,7 +14,7 @@ void* multInt(void *a, void *b) {
     int* ia = (int*)a;
 	int* ib = (int*)b;
     int *r = malloc(sizeof(int));
-    *r = *ia + *ib;
+    *r = *ia * *ib;
     return (void *)r;
 }
 
@@ -41,12 +41,14 @@ int intIsEqual(void *a, void *b) {
 }
 
 struct Ring* CreateIntRing() {
-    int *intZero = malloc(sizeof(int *));
-    int *intOne = malloc(sizeof(int *));
+    int *intZero = malloc(sizeof(int));
+    int *intOne = malloc(sizeof(int));
     *intZero = 0;
     *intOne = 1;
+    void* vOne = (void*)intOne;
+    void* vZero = (void*)intZero;
     size_t size = sizeof(int);
-    return CreateRing(size, sumInt, multInt, minusInt, (void *)intZero, (void *)intOne, intIsEqual, intToString);
+    return CreateRing(size, sumInt, multInt, minusInt, vZero, vOne, intIsEqual, intToString);
 }
 
 

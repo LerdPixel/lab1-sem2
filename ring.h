@@ -29,16 +29,17 @@ struct Ring* CreateRing(size_t size, void* (*sum)(void*, void*), void* (*mult)(v
 void DeleteRing(struct Ring* ringInfo) {
     free(ringInfo->zero);
     free(ringInfo->one);
+    free(ringInfo);
 }
 
 struct Ring* ringCopy(struct Ring* ring) {
     struct Ring* ringInfo = malloc(sizeof(struct Ring));
     ringInfo->size = ring->size;
 	ringInfo->sum = ring->sum;
-	ringInfo->zero = ring->zero;
+	ringInfo->zero = ring->sum(ring->zero, ring->zero);
 	ringInfo->minus = ring->minus;
 	ringInfo->mult = ring->mult;
-	ringInfo->one = ring->one;
+	ringInfo->one = ring->sum(ring->one, ring->zero);
     ringInfo->isEqual = ring->isEqual;
     ringInfo->string = ring->string;
     return ringInfo;

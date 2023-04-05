@@ -7,13 +7,7 @@ struct Polynomial {
     void **coefficients;
     int degree;
 };
-/*
-struct Polynomial* scanFromValues(struct Ring ringInfo) {
-    int degree = lengthInput();
-    void *array = voidInput(degree);
-    return FromValues(ringInfo, array, degree);
-}
-*/
+
 int zeroCutter(struct Ring *ringInfo, void **coefficients, int degree) {
     int i;
     for (i = degree; i > 0; --i) {
@@ -22,7 +16,6 @@ int zeroCutter(struct Ring *ringInfo, void **coefficients, int degree) {
     }
     return i;
 }
-
 
 struct Polynomial* FromValues(struct Ring *ringInfo, void **values, int degree) {
     struct Polynomial *polyn = (struct Polynomial*) malloc(sizeof(struct Polynomial));
@@ -43,17 +36,14 @@ struct Polynomial* ZeroPolynomial(struct Ring *ringInfo) {
     return polyn;
 }
 
-
 void DeletePolynomial(struct Polynomial* polyn) {
     for (int i = 0; i < polyn->degree; ++i) {
         free(polyn->coefficients[i]);
     }
     free(polyn->coefficients);
-    free(polyn->ring);
+    DeleteRing(polyn->ring);
     free(polyn);
 }
-
-
 
 struct Polynomial* sumWithSortedCoefficients(const struct Polynomial *maxPolyn, const struct Polynomial *minPolyn) {
     void **coefficients = (void**)malloc(sizeof(void*) * maxPolyn->degree);
@@ -82,7 +72,14 @@ struct Polynomial* sum(const struct Polynomial *polyn1, const struct Polynomial 
     return res;
 }
 
-
+struct Polynomial* multScal(const struct Polynomial *polyn, void* scal) {
+    struct Polynomial* res;
+    void **coefficients = (void**)malloc(sizeof(void*) * polyn->degree);
+    for (int i = 0; i < polyn->degree; ++i) {
+        coefficients[i] = polyn->ring->mult(polyn->coefficients[i], scal);
+    }
+    return FromValues(ringCopy(polyn->ring), coefficients, polyn->degree);
+}
 
 int digitCounter(int x) {
     int res = 0;
@@ -121,7 +118,7 @@ char* polynToString(struct Polynomial *polyn) {
         free(buff);
     }
 
-    if (i) {
+    if (polyn->degree>0) {
         str[strlen(str)-3] = 0;
     }
     str = realloc(str, sizeof(char) * (strlen(str)+1));

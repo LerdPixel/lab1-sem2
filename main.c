@@ -21,22 +21,24 @@ void **toVoidPointerArray(int *array, int length) {
 int main(int argc, char const *argv[]) {
     int a[] = {-2, 1, 1, 0};
     int b[] = {7, 6, -1, -2};
-    int l = 3;
-    struct Polynomial* p1 = FromValues(CreateIntRing(), toVoidPointerArray(a, 4), 4);
-    struct Polynomial* p2 = FromValues(CreateIntRing(), toVoidPointerArray(b, 4), 4);
-    struct Polynomial* p4 = ZeroPolynomial(CreateIntRing());
-    char *str;
-
-//    struct Polynomial* p3 = sum(p4, p2);
+    int la = 4;
+    int lb = 4;
+    int *n = malloc(sizeof(int));
+    *n = 0;
+    struct Polynomial* p1 = FromValues(CreateIntRing(), toVoidPointerArray(a, la), la);
+    struct Polynomial* p2 = FromValues(CreateIntRing(), toVoidPointerArray(b, lb), lb);
+    struct Polynomial* p3 = multScal(p1,(void*)n);
+    struct Polynomial* p4 = sum(p1,p3);
+    char* str;
+    printf("%s\n", str = polynToString(p3));
+    free(str);
     printf("%s\n", str = polynToString(p1));
     free(str);
-    printf("%s\n", str = polynToString(p4));
-    free(str);
-//    printf("%s\n", str = polynToString(p3));
-//    free(str);
+
+    DeletePolynomial(p4);
+    DeletePolynomial(p3);
     DeletePolynomial(p1);
     DeletePolynomial(p2);
-//    DeletePolynomial(p3);
-    DeletePolynomial(p4);
+    free(n);
     return 0;
 }
