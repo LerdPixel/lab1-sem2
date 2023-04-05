@@ -14,15 +14,46 @@ struct Polynomial* scanFromValues(struct Ring ringInfo) {
     return FromValues(ringInfo, array, degree);
 }
 */
+int zeroCutter(struct Ring *ringInfo, void **coefficients, int degree) {
+    int i;
+    for (i = degree; i > 0; --i) {
+        if(! ringInfo->isEqual(ringInfo->zero, coefficients[i-1]))
+            break;
+    }
+    return i;
+}
 
 
 struct Polynomial* FromValues(struct Ring *ringInfo, void **values, int degree) {
-    struct Polynomial *polynom = (struct Polynomial*) malloc(sizeof(struct Polynomial));
-    polynom->ring = ringInfo;
-    polynom->coefficients = values;
-    polynom->degree = degree;
-    return polynom;
+    struct Polynomial *polyn = (struct Polynomial*) malloc(sizeof(struct Polynomial));
+    polyn->degree = zeroCutter(ringInfo, values, degree);
+    for (int i = polyn->degree; i < degree; ++i) {
+        free(*(values+i));
+    }
+    polyn->coefficients = (void**)realloc(values, sizeof(void*) * polyn->degree);
+    polyn->ring = ringInfo;
+    return polyn;
 }
+
+struct Polynomial* ZeroPolynomial(struct Ring *ringInfo) {
+    struct Polynomial *polyn = (struct Polynomial*) malloc(sizeof(struct Polynomial));
+    polyn->degree = 0;
+    polyn->coefficients = NULL;
+    polyn->ring = ringInfo;
+    return polyn;
+}
+
+
+void DeletePolynomial(struct Polynomial* polyn) {
+    for (int i = 0; i < polyn->degree; ++i) {
+        free(polyn->coefficients[i]);
+    }
+    free(polyn->coefficients);
+    free(polyn->ring);
+    free(polyn);
+}
+
+
 
 struct Polynomial* sumWithSortedCoefficients(const struct Polynomial *maxPolyn, const struct Polynomial *minPolyn) {
     void **coefficients = (void**)malloc(sizeof(void*) * maxPolyn->degree);
@@ -33,7 +64,8 @@ struct Polynomial* sumWithSortedCoefficients(const struct Polynomial *maxPolyn, 
     for (; i < maxPolyn->degree; ++i) {
         coefficients[i] = maxPolyn->ring->sum(maxPolyn->coefficients[i], maxPolyn->ring->zero);
     }
-    return FromValues(maxPolyn->ring, coefficients, maxPolyn->degree);
+
+    return FromValues(ringCopy(maxPolyn->ring), coefficients, maxPolyn->degree);
 }
 
 struct Polynomial* sum(const struct Polynomial *polyn1, const struct Polynomial *polyn2) {
@@ -49,6 +81,8 @@ struct Polynomial* sum(const struct Polynomial *polyn1, const struct Polynomial 
     }
     return res;
 }
+
+
 
 int digitCounter(int x) {
     int res = 0;
@@ -66,20 +100,25 @@ char* polynToString(struct Polynomial *polyn) {
     int len = 0;
     int varLen = 0;
     int i;
-    for (i = 0; i < polyn->degree; ++i) {
-        buff = polyn->ring->string(polyn->coefficients[i]);
-        degreeString = malloc(sizeof(char) * (digitCounter(i) + 1));
+    for (i = polyn->degree - 1; i >= 0; --i) {
+        buff = polyn->ring->string(polyn->coefficients[i]); // add coefficient
 
-        sprintf(degreeString, "%d", i);
-        buff = realloc(buff, sizeof(char) * (strlen(buff) + strlen(degreeString) + 7) );
-        strcat(buff, "x^");
-        strcat(buff, degreeString);
+        if (i) {
+            degreeString = malloc(sizeof(char) * (digitCounter(i) + 1));
+            sprintf(degreeString, "%d", i); // add degree
+            buff = realloc(buff, sizeof(char) * (strlen(buff) + strlen(degreeString) + 7) );
+            strcat(buff, "x^"); // add x^degree
+            strcat(buff, degreeString);
+            free(degreeString);
+        }
+        else {
+            buff = realloc(buff, sizeof(char) * (strlen(buff) + 5) );
+        }
         strcat(buff, " + ");
         str = realloc(str, sizeof(char) * (len+1+strlen(buff)));
         strcat(str, buff);
         len = strlen(str);
         free(buff);
-        free(degreeString);
     }
 
     if (i) {

@@ -34,13 +34,19 @@ char* intToString(void *number) {
     return str;
 }
 
+int intIsEqual(void *a, void *b) {
+    int* ia = (int*)a;
+	int* ib = (int*)b;
+    return (*ia == *ib);
+}
+
 struct Ring* CreateIntRing() {
     int *intZero = malloc(sizeof(int *));
     int *intOne = malloc(sizeof(int *));
     *intZero = 0;
     *intOne = 1;
     size_t size = sizeof(int);
-    return CreateRing(size, sumInt, multInt, minusInt, (void *)intZero, (void *)intOne, intToString);
+    return CreateRing(size, sumInt, multInt, minusInt, (void *)intZero, (void *)intOne, intIsEqual, intToString);
 }
 
 
