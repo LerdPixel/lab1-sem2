@@ -21,7 +21,7 @@ void prt(struct Polynomial* polyn) {
 }
 int main(int argc, char const *argv[]) {
     int a[] = {1};
-    int b[] = {1, 1, 1};
+    int b[] = {-1, 2, -1};
     int la = 1;
     int lb = 3;
     int *n = malloc(sizeof(int));
@@ -30,6 +30,8 @@ int main(int argc, char const *argv[]) {
     struct Polynomial* p2 = FromValues(CreateIntRing(), toVoidPointerArray(b, lb), lb);
     struct Polynomial* p3 = mult(p1, p2);
     struct Polynomial* p4 = sum(p2,p3);
+    int *c = (int *)calculation(p1, n);
+    printf("%d\n", *c);
     prt(p1);
     prt(p2);
     prt(p3);
@@ -39,5 +41,6 @@ int main(int argc, char const *argv[]) {
     DeletePolynomial(p1);
     DeletePolynomial(p2);
     free(n);
+    free(c);
     return 0;
 }

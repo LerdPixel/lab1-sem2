@@ -26,7 +26,7 @@ struct Polynomial* multScal(const struct Polynomial *polyn, void* scal);
 
 struct Polynomial* mult(const struct Polynomial *polyn1, const struct Polynomial *polyn2);
 
-struct Polynomial* calculation(const struct Polynomial *polyn, void *value);
+void* calculation(const struct Polynomial *polyn, void *value);
 
 struct Polynomial* composition(const struct Polynomial *polyn1, const struct Polynomial *polyn2);
 

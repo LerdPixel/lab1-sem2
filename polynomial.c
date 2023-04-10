@@ -92,7 +92,17 @@ struct Polynomial* multScal(const struct Polynomial *polyn, void* scal) {
     return FromValues(ringCopy(polyn->ring), coefficients, polyn->degree);
 }
 
-
+void* calculation(const struct Polynomial *polyn, void *value) { // calculated by Horner's method
+    void *res = elementCopy(polyn->ring, polyn->ring->zero);
+    for (int i = polyn->degree - 1; i >= 0; --i) {
+        void *t = res;
+        void *a = polyn->ring->mult(res, value);
+        res = polyn->ring->sum(a, polyn->coefficients[i]);
+        free(t);
+        free(a);
+    }
+    return res;
+}
 
 
 int digitCounter(int x) {
