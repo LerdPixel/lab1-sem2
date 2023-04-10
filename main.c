@@ -3,9 +3,6 @@
 #include <string.h>
 #include <math.h>
 //#include "array_input.h"
-
-#include "ring.h"
-#include "int.h"
 #include "polynomial.h"
 
 void **toVoidPointerArray(int *array, int length) {

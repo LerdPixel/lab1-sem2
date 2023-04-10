@@ -1,55 +1,20 @@
 #ifndef INT_VECTOR3
 #define INT_VECTOR3
+
+#include "ring.h"
 #define ENOUGH 12
 
-void* sumInt(void *a, void *b) {
-    int* ia = (int*)a;
-	int* ib = (int*)b;
-    int *r = malloc(sizeof(int));
-    *r = *ia + *ib;
-    return (void *)r;
-}
+void* sumInt(void *a, void *b);
 
-void* multInt(void *a, void *b) {
-    int* ia = (int*)a;
-	int* ib = (int*)b;
-    int *r = malloc(sizeof(int));
-    *r = *ia * *ib;
-    return (void *)r;
-}
+void* multInt(void *a, void *b);
 
-void* minusInt(void *a) {
-    int* ia = (int*)a;
-    int *r = malloc(sizeof(int));
-    *r = - *ia;
-    return (void *)r;
-}
+void* minusInt(void *a);
 
-char* intToString(void *number) {
-    char *str = malloc(ENOUGH * sizeof(char));
-    int *intNumber = (int *)number, len;
-    sprintf(str, "%d", *intNumber);
-    len = strlen(str);
-    str = realloc(str, (len + 1) * sizeof(char));
-    return str;
-}
+char* intToString(void *number);
 
-int intIsEqual(void *a, void *b) {
-    int* ia = (int*)a;
-	int* ib = (int*)b;
-    return (*ia == *ib);
-}
+int intIsEqual(void *a, void *b);
 
-struct Ring* CreateIntRing() {
-    int *intZero = malloc(sizeof(int));
-    int *intOne = malloc(sizeof(int));
-    *intZero = 0;
-    *intOne = 1;
-    void* vOne = (void*)intOne;
-    void* vZero = (void*)intZero;
-    size_t size = sizeof(int);
-    return CreateRing(size, sumInt, multInt, minusInt, vZero, vOne, intIsEqual, intToString);
-}
+struct Ring* CreateIntRing(void);
 
 
 
