@@ -34,3 +34,13 @@ struct Ring* ringCopy(struct Ring* ring) {
     return ringInfo;
 
 }
+
+void* elementCopy(struct Ring* ring, void* element) {
+    void* copy = malloc(ring->size);
+    if (copy == NULL) {
+        return NULL;
+        /* error handling here */
+    }
+    memcpy(copy, element, ring->size);
+    return copy;
+}

@@ -5,7 +5,7 @@
 #include <string.h>
 
 struct Ring {
-    size_t size;
+    size_t size; // size in bytes
     void* (*sum)(void*, void*);
     void* zero;
     void* (*minus)(void*);
@@ -21,5 +21,7 @@ struct Ring* CreateRing(size_t size, void* (*sum)(void*, void*), void* (*mult)(v
 void DeleteRing(struct Ring* ringInfo);
 
 struct Ring* ringCopy(struct Ring* ring);
+
+void* elementCopy(struct Ring* ring, void* element);
 
 #endif

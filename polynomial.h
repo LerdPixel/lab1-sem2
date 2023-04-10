@@ -1,5 +1,8 @@
 #ifndef POLYNOMIAL
 #define POLYNOMIAL
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "ring.h"
 #include "int.h"
 
@@ -17,11 +20,15 @@ struct Polynomial* ZeroPolynomial(struct Ring *ringInfo);
 
 void DeletePolynomial(struct Polynomial* polyn);
 
-struct Polynomial* sumWithSortedCoefficients(const struct Polynomial *maxPolyn, const struct Polynomial *minPolyn);
-
 struct Polynomial* sum(const struct Polynomial *polyn1, const struct Polynomial *polyn2);
 
 struct Polynomial* multScal(const struct Polynomial *polyn, void* scal);
+
+struct Polynomial* mult(const struct Polynomial *polyn1, const struct Polynomial *polyn2);
+
+struct Polynomial* calculation(const struct Polynomial *polyn, void *value);
+
+struct Polynomial* composition(const struct Polynomial *polyn1, const struct Polynomial *polyn2);
 
 int digitCounter(int x);
 
