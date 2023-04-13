@@ -5,7 +5,10 @@
 //#include "array_input.h"
 #include "polynomial.h"
 
-void **toVoidPointerArray(int *array, int length) {
+
+
+
+void **fromIntToVoidPointerArray(int *array, int length) {
     void **voidArray = malloc(sizeof(void *) * length);
     for (int i = 0; i < length; ++i) {
         int *element = malloc(sizeof(int));
@@ -13,6 +16,14 @@ void **toVoidPointerArray(int *array, int length) {
         voidArray[i] = (void *) element;
     }
     return voidArray;
+}
+
+struct Polynomial* polynCreator(int* array, int length, int type) {
+    switch (type) {
+        case 1:
+            return FromValues(CreateIntRing(), fromIntToVoidPointerArray(array, length), length);
+            break;
+    }
 }
 
 void prt(struct Polynomial* polyn) {
@@ -28,8 +39,8 @@ int main(int argc, char const *argv[]) {
     int lb = 3;
     int *n = malloc(sizeof(int));
     *n = 10;
-    struct Polynomial* p1 = FromValues(CreateIntRing(), toVoidPointerArray(a, la), la);
-    struct Polynomial* p2 = FromValues(CreateIntRing(), toVoidPointerArray(b, lb), lb);
+    struct Polynomial* p1 = FromValues(CreateIntRing(), fromIntToVoidPointerArray(a, la), la);
+    struct Polynomial* p2 = polynCreator(b, 3, 1);
     struct Polynomial* p3 = ZeroPolynomial(CreateIntRing());
     struct Polynomial* p4 = sum(p3,p2);
     printf("cmp = %d\n", polynCmp(p4,p2));
