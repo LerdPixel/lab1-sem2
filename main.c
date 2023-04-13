@@ -14,11 +14,13 @@ void **toVoidPointerArray(int *array, int length) {
     }
     return voidArray;
 }
+
 void prt(struct Polynomial* polyn) {
     char *str;
     printf("%s\n", str = polynToString(polyn));
     free(str);
 }
+
 int main(int argc, char const *argv[]) {
     int a[] = {1};
     int b[] = {-1, 2, -1};
@@ -28,19 +30,17 @@ int main(int argc, char const *argv[]) {
     *n = 10;
     struct Polynomial* p1 = FromValues(CreateIntRing(), toVoidPointerArray(a, la), la);
     struct Polynomial* p2 = FromValues(CreateIntRing(), toVoidPointerArray(b, lb), lb);
-    struct Polynomial* p3 = mult(p1, p2);
-    struct Polynomial* p4 = sum(p2,p3);
-    int *c = (int *)calculation(p1, n);
-    printf("%d\n", *c);
+    struct Polynomial* p3 = ZeroPolynomial(CreateIntRing());
+    struct Polynomial* p4 = sum(p3,p2);
+    printf("cmp = %d\n", polynCmp(p4,p2));
     prt(p1);
     prt(p2);
     prt(p3);
     prt(p4);
     DeletePolynomial(p4);
     DeletePolynomial(p3);
-    DeletePolynomial(p1);
     DeletePolynomial(p2);
+    DeletePolynomial(p1);
     free(n);
-    free(c);
     return 0;
 }

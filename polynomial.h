@@ -28,6 +28,8 @@ struct Polynomial* mult(const struct Polynomial *polyn1, const struct Polynomial
 
 void* calculation(const struct Polynomial *polyn, void *value);
 
+int polynCmp(const struct Polynomial *polyn1, const struct Polynomial *polyn2);
+
 struct Polynomial* composition(const struct Polynomial *polyn1, const struct Polynomial *polyn2);
 
 int digitCounter(int x);

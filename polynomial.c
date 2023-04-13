@@ -8,7 +8,6 @@ int zeroCutter(struct Ring *ringInfo, void **coefficients, int degree) {
     }
     return i;
 }
-
 struct Polynomial* FromValues(struct Ring *ringInfo, void **values, int degree) {
     struct Polynomial *polyn = (struct Polynomial*) malloc(sizeof(struct Polynomial));
     polyn->degree = zeroCutter(ringInfo, values, degree);
@@ -19,8 +18,6 @@ struct Polynomial* FromValues(struct Ring *ringInfo, void **values, int degree) 
     polyn->ring = ringInfo;
     return polyn;
 }
-
-
 
 struct Polynomial* ZeroPolynomial(struct Ring *ringInfo) {
     struct Polynomial *polyn = (struct Polynomial*) malloc(sizeof(struct Polynomial));
@@ -70,6 +67,22 @@ struct Polynomial* mult(const struct Polynomial *polyn1, const struct Polynomial
     return FromValues(ringCopy(polyn1->ring), coefficients, len);
 }
 
+struct Polynomial* sumPolynAndScal(const struct Polynomial *polyn, void *num) {
+    if (polyn->degree >= 1) {
+        void **coefficients = (void**)malloc(sizeof(void*) * polyn->degree);
+        coefficients[0] = polyn->ring->sum(polyn->coefficients[0], num);
+        for (int i = 1; i < polyn->degree; ++i) {
+            coefficients[i] = elementCopy(polyn->ring, polyn->coefficients[i]);
+        }
+        return FromValues(ringCopy(polyn->ring), coefficients, polyn->degree);
+    }
+    else {
+        void **coefficients = (void**)malloc(sizeof(void*));
+        coefficients[0] = elementCopy(polyn->ring, num);
+        return FromValues(ringCopy(polyn->ring), coefficients, 1);
+    }
+}
+
 
 struct Polynomial* sum(const struct Polynomial *polyn1, const struct Polynomial *polyn2) {
     // compairing ring1 and ring2
@@ -84,7 +97,7 @@ struct Polynomial* sum(const struct Polynomial *polyn1, const struct Polynomial 
     return res;
 }
 
-struct Polynomial* multScal(const struct Polynomial *polyn, void* scal) {
+struct Polynomial* multScal(const struct Polynomial *polyn, void *scal) {
     void **coefficients = (void**)malloc(sizeof(void*) * polyn->degree);
     for (int i = 0; i < polyn->degree; ++i) {
         coefficients[i] = polyn->ring->mult(polyn->coefficients[i], scal);
@@ -102,6 +115,31 @@ void* calculation(const struct Polynomial *polyn, void *value) { // calculated b
         free(a);
     }
     return res;
+}
+
+
+struct Polynomial* composition(const struct Polynomial *polyn1, const struct Polynomial *polyn2) {
+    struct Polynomial *res = ZeroPolynomial(polyn1->ring);
+    for (int i = polyn1->degree - 1; i >= 0; --i) {
+        struct Polynomial *t = res;
+        struct Polynomial *a = mult(res, polyn2);
+        res = sumPolynAndScal(polyn2, polyn1->coefficients[i]);
+        free(t);
+        free(a);
+        printf("%d\n", i);
+    }
+    return res;
+}
+
+int polynCmp(const struct Polynomial *polyn1, const struct Polynomial *polyn2) { // 1 if equal; 0 if different
+    if (polyn1->degree != polyn2->degree)
+        return 0;
+    for (int i = 0; i < polyn1->degree; ++i) {
+        if (!polyn1->ring->isEqual(polyn1->coefficients[i], polyn2->coefficients[i])) {
+            return 0;
+        }
+    }
+    return 1;
 }
 
 
