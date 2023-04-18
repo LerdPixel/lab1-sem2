@@ -5,6 +5,7 @@
 #include <string.h>
 #include "ring.h"
 #include "int.h"
+#include "double.h"
 
 struct Polynomial {
     struct Ring *ring;
@@ -29,6 +30,8 @@ struct Polynomial* mult(const struct Polynomial *polyn1, const struct Polynomial
 void* calculation(const struct Polynomial *polyn, void *value);
 
 int polynCmp(const struct Polynomial *polyn1, const struct Polynomial *polyn2);
+
+struct Polynomial* sumPolynAndScal(const struct Polynomial *polyn, void *num);
 
 struct Polynomial* composition(const struct Polynomial *polyn1, const struct Polynomial *polyn2);
 

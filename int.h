@@ -1,8 +1,8 @@
-#ifndef INT_VECTOR3
-#define INT_VECTOR3
+#ifndef INT_POLYN
+#define INT_POLYN
 
 #include "ring.h"
-#define ENOUGH 12
+#define ENOUGH 20
 
 void* sumInt(void *a, void *b);
 

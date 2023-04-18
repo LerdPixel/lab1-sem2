@@ -51,6 +51,7 @@ struct Polynomial* sumWithSortedDegrees(const struct Polynomial *maxPolyn, const
 
 struct Polynomial* mult(const struct Polynomial *polyn1, const struct Polynomial *polyn2) {
     int len = polyn1->degree + polyn2->degree - 1;
+    if (len == -1) len = 0; // if polyn1's and polyn2's degrees are 0
     void **coefficients = (void**)malloc(sizeof(void*) * len);
     for (int i = 0; i < len; ++i) {
         coefficients[i] = elementCopy(polyn1->ring, polyn1->ring->zero);
@@ -119,14 +120,14 @@ void* calculation(const struct Polynomial *polyn, void *value) { // calculated b
 
 
 struct Polynomial* composition(const struct Polynomial *polyn1, const struct Polynomial *polyn2) {
-    struct Polynomial *res = ZeroPolynomial(polyn1->ring);
+    struct Polynomial *res = ZeroPolynomial(ringCopy(polyn1->ring));
     for (int i = polyn1->degree - 1; i >= 0; --i) {
         struct Polynomial *t = res;
-        struct Polynomial *a = mult(res, polyn2);
-        res = sumPolynAndScal(polyn2, polyn1->coefficients[i]);
-        free(t);
-        free(a);
-        printf("%d\n", i);
+        res = mult(res, polyn2);
+        struct Polynomial *a = res;
+        res = sumPolynAndScal(res, polyn1->coefficients[i]);
+        DeletePolynomial(t);
+        DeletePolynomial(a);
     }
     return res;
 }
