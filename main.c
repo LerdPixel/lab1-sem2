@@ -1,14 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
-//#include "array_input.h"
 #include "polynomial.h"
-#include "for_testing.h"
+#include "interface.h"
 
 
-
-
+/*
 int main(int argc, char const *argv[]) {
     double a[] = {1.5};
     double b[] = {-1.3, 2, -1};
@@ -30,5 +27,11 @@ int main(int argc, char const *argv[]) {
     DeletePolynomial(p2);
     DeletePolynomial(p1);
     free(n);
+    return 0;
+}
+*/
+
+int main() {
+    interface();
     return 0;
 }

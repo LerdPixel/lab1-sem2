@@ -28,6 +28,7 @@ struct Polynomial* ZeroPolynomial(struct Ring *ringInfo) {
 }
 
 void DeletePolynomial(struct Polynomial* polyn) {
+    if (polyn == NULL) return;
     for (int i = 0; i < polyn->degree; ++i) {
         free(polyn->coefficients[i]);
     }
